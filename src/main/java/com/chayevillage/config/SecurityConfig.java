@@ -29,12 +29,12 @@ public class SecurityConfig {
             .and()
             .authorizeRequests()
             // 公开接口 - 读取操作无需认证
-            .antMatchers(HttpMethod.GET, "/api/v1/banners/**").permitAll()
-            .antMatchers(HttpMethod.GET, "/api/v1/village-info/**").permitAll()
-            .antMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll()
-            .antMatchers(HttpMethod.GET, "/api/v1/spots/**").permitAll()
-            .antMatchers(HttpMethod.GET, "/api/v1/articles/**").permitAll()
-            .antMatchers(HttpMethod.GET, "/api/v1/dashboard/stats/**").permitAll()
+            .antMatchers(HttpMethod.GET, "/api/v1/banners", "/api/v1/banners/**").permitAll()
+            .antMatchers(HttpMethod.GET, "/api/v1/village-info", "/api/v1/village-info/**").permitAll()
+            .antMatchers(HttpMethod.GET, "/api/v1/products", "/api/v1/products/**").permitAll()
+            .antMatchers(HttpMethod.GET, "/api/v1/spots", "/api/v1/spots/**").permitAll()
+            .antMatchers(HttpMethod.GET, "/api/v1/articles", "/api/v1/articles/**").permitAll()
+            .antMatchers(HttpMethod.GET, "/api/v1/dashboard/stats", "/api/v1/dashboard/stats/**").permitAll()
             // 管理员登录接口公开
             .antMatchers("/api/v1/admin/auth/login").permitAll()
             // 管理端其他接口需要认证
