@@ -34,11 +34,13 @@ public class VillageInfoServiceImpl implements VillageInfoService {
 
     @Override
     public boolean saveOrUpdate(VillageInfo info) {
-        if (info.getId() != null) {
-            VillageInfo existing = villageInfoMapper.selectById(info.getId());
-            if (existing != null) {
-                return villageInfoMapper.updateById(info) > 0;
-            }
+        // 先按 section 查是否已存在
+        LambdaQueryWrapper<VillageInfo> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(VillageInfo::getSection, info.getSection());
+        VillageInfo existing = villageInfoMapper.selectOne(wrapper);
+        if (existing != null) {
+            info.setId(existing.getId());
+            return villageInfoMapper.updateById(info) > 0;
         }
         return villageInfoMapper.insert(info) > 0;
     }
