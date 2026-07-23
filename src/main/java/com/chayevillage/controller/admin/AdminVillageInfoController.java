@@ -19,6 +19,12 @@ public class AdminVillageInfoController {
         return Result.success(info);
     }
 
+    @PostMapping
+    public Result<?> create(@RequestBody VillageInfo info) {
+        villageInfoService.saveOrUpdate(info);
+        return Result.success();
+    }
+
     @PutMapping("/{section}")
     public Result<?> saveOrUpdate(@PathVariable String section, @RequestBody VillageInfo info) {
         info.setSection(section);
