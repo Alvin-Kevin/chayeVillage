@@ -1,11 +1,11 @@
 server:
-  port: ${PORT:8080}
+  port: 8080
 
 spring:
   datasource:
-    url: jdbc:mysql://${MYSQLHOST:localhost}:${MYSQLPORT:3306}/${MYSQLDATABASE:chaye_village}?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
-    username: ${MYSQLUSER:root}
-    password: ${MYSQLPASSWORD:Wzy@9298}
+    url: jdbc:mysql://localhost:3306/chaye_village?=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: Wzy@9298
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jackson:
@@ -32,5 +32,5 @@ file:
     path: uploads
 
 jwt:
-  secret: ${JWT_SECRET:chaye-village-jwt-secret-key-2026-summer-practice-mabian}
+  secret: chaye-village-jwt-secret-key-2026-summer-practice-mabian
   expiration: 7200000
