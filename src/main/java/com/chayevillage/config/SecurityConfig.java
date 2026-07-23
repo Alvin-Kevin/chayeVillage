@@ -37,6 +37,8 @@ public class SecurityConfig {
             .antMatchers(HttpMethod.GET, "/api/v1/dashboard/stats", "/api/v1/dashboard/stats/**").permitAll()
             // 管理员登录接口公开
             .antMatchers("/api/v1/admin/auth/login").permitAll()
+            // 静态资源公开
+            .antMatchers("/uploads/**").permitAll()
             // 管理端其他接口需要认证
             .antMatchers("/api/v1/admin/**").hasRole("ADMIN")
             .anyRequest().authenticated()
