@@ -22,6 +22,8 @@ public class Spot {
 
     private String coverImage;
 
+    private String images;
+
     private String tags;
 
     private Integer status;

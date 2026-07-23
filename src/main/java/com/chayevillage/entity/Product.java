@@ -29,6 +29,8 @@ public class Product {
 
     private String coverImage;
 
+    private String images;
+
     private Integer isFeatured;
 
     private Integer status;
