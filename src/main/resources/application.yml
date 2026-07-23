@@ -29,7 +29,7 @@ mybatis-plus:
 
 file:
   upload:
-    path: uploads
+    path: ${FILE_UPLOAD_PATH:/app/uploads}
 
 jwt:
   secret: ${JWT_SECRET:chaye-village-jwt-secret-key-2026-summer-practice-mabian}
