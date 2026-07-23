@@ -27,7 +27,7 @@ public class JwtTokenProvider {
                 .claim("role", "ADMIN")
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, secret)
+                .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
 
