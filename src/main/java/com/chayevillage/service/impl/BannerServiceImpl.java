@@ -1,7 +1,9 @@
 package com.chayevillage.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.chayevillage.common.BusinessException;
+import com.chayevillage.common.PageResult;
 import com.chayevillage.entity.Banner;
 import com.chayevillage.mapper.BannerMapper;
 import com.chayevillage.service.BannerService;
@@ -29,6 +31,20 @@ public class BannerServiceImpl implements BannerService {
         LambdaQueryWrapper<Banner> wrapper = new LambdaQueryWrapper<>();
         wrapper.orderByDesc(Banner::getCreatedAt);
         return bannerMapper.selectList(wrapper);
+    }
+
+    @Override
+    public PageResult<Banner> getPage(int pageNum, int pageSize) {
+        Page<Banner> page = new Page<>(pageNum, pageSize);
+        LambdaQueryWrapper<Banner> wrapper = new LambdaQueryWrapper<>();
+        wrapper.orderByDesc(Banner::getCreatedAt);
+        bannerMapper.selectPage(page, wrapper);
+        return PageResult.of(page);
+    }
+
+    @Override
+    public long count() {
+        return bannerMapper.selectCount(null);
     }
 
     @Override

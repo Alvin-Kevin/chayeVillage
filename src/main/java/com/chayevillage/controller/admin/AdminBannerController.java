@@ -1,12 +1,11 @@
 package com.chayevillage.controller.admin;
 
+import com.chayevillage.common.PageResult;
 import com.chayevillage.common.Result;
 import com.chayevillage.entity.Banner;
 import com.chayevillage.service.BannerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/admin/banners")
@@ -16,9 +15,11 @@ public class AdminBannerController {
     private final BannerService bannerService;
 
     @GetMapping
-    public Result<List<Banner>> getAllList() {
-        List<Banner> list = bannerService.getAllList();
-        return Result.success(list);
+    public Result<PageResult<Banner>> getList(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        PageResult<Banner> result = bannerService.getPage(page, size);
+        return Result.success(result);
     }
 
     @GetMapping("/{id}")

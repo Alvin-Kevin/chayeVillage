@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ArticleService {
 
-    PageResult<Article> getPage(String categoryCode, int page, int size);
+    PageResult<Article> getPage(String categoryCode, Long categoryId, int page, int size);
 
     Article getById(Long id);
 
@@ -23,5 +23,9 @@ public interface ArticleService {
 
     boolean unpublish(Long id);
 
+    boolean updateStatus(Long id, Integer status);
+
     void incrementViewCount(Long id);
+
+    long count();
 }

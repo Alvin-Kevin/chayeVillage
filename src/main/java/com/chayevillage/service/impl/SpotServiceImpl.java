@@ -1,7 +1,9 @@
 package com.chayevillage.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.chayevillage.common.BusinessException;
+import com.chayevillage.common.PageResult;
 import com.chayevillage.entity.Spot;
 import com.chayevillage.mapper.SpotMapper;
 import com.chayevillage.service.SpotService;
@@ -22,6 +24,20 @@ public class SpotServiceImpl implements SpotService {
         wrapper.eq(Spot::getStatus, 1)
                .orderByAsc(Spot::getSortOrder);
         return spotMapper.selectList(wrapper);
+    }
+
+    @Override
+    public PageResult<Spot> getPage(int pageNum, int pageSize) {
+        Page<Spot> page = new Page<>(pageNum, pageSize);
+        LambdaQueryWrapper<Spot> wrapper = new LambdaQueryWrapper<>();
+        wrapper.orderByDesc(Spot::getCreatedAt);
+        spotMapper.selectPage(page, wrapper);
+        return PageResult.of(page);
+    }
+
+    @Override
+    public long count() {
+        return spotMapper.selectCount(null);
     }
 
     @Override

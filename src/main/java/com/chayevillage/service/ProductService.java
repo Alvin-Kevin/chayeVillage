@@ -20,4 +20,6 @@ public interface ProductService {
     boolean delete(Long id);
 
     boolean toggleStatus(Long id);
+
+    long count();
 }

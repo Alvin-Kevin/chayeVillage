@@ -25,7 +25,7 @@ public class ArticleController {
 
     @GetMapping
     public Result<PageResult<Article>> getList(ArticleQueryRequest params) {
-        PageResult<Article> page = articleService.getPage(params.getCategoryCode(), params.getPage(), params.getSize());
+        PageResult<Article> page = articleService.getPage(params.getCategoryCode(), null, params.getPage(), params.getSize());
         return Result.success(page);
     }
 

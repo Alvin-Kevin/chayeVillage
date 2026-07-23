@@ -8,6 +8,8 @@ import com.chayevillage.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v1/admin/articles")
 @RequiredArgsConstructor
@@ -17,7 +19,7 @@ public class AdminArticleController {
 
     @GetMapping
     public Result<PageResult<Article>> getList(ArticleQueryRequest params) {
-        PageResult<Article> page = articleService.getPage(params.getCategoryCode(), params.getPage(), params.getSize());
+        PageResult<Article> page = articleService.getPage(params.getCategoryCode(), params.getCategoryId(), params.getPage(), params.getSize());
         return Result.success(page);
     }
 
@@ -55,6 +57,12 @@ public class AdminArticleController {
     @PutMapping("/{id}/unpublish")
     public Result<?> unpublish(@PathVariable Long id) {
         articleService.unpublish(id);
+        return Result.success();
+    }
+
+    @PutMapping("/{id}/status")
+    public Result<?> updateStatus(@PathVariable Long id, @RequestBody Map<String, Integer> body) {
+        articleService.updateStatus(id, body.get("status"));
         return Result.success();
     }
 }

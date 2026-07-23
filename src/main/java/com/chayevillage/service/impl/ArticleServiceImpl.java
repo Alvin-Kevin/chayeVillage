@@ -26,11 +26,13 @@ public class ArticleServiceImpl implements ArticleService {
     private final ArticleCategoryMapper articleCategoryMapper;
 
     @Override
-    public PageResult<Article> getPage(String categoryCode, int pageNum, int pageSize) {
+    public PageResult<Article> getPage(String categoryCode, Long categoryId, int pageNum, int pageSize) {
         Page<Article> page = new Page<>(pageNum, pageSize);
         LambdaQueryWrapper<Article> wrapper = new LambdaQueryWrapper<>();
 
-        if (StringUtils.hasText(categoryCode)) {
+        if (categoryId != null) {
+            wrapper.eq(Article::getCategoryId, categoryId);
+        } else if (StringUtils.hasText(categoryCode)) {
             ArticleCategory category = articleCategoryMapper.selectOne(
                     new LambdaQueryWrapper<ArticleCategory>()
                             .eq(ArticleCategory::getCode, categoryCode)
@@ -97,9 +99,24 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public boolean updateStatus(Long id, Integer status) {
+        Article article = getById(id);
+        article.setStatus(status);
+        if (status == 1) {
+            article.setPublishedAt(LocalDateTime.now());
+        }
+        return articleMapper.updateById(article) > 0;
+    }
+
+    @Override
     public void incrementViewCount(Long id) {
         Article article = getById(id);
         article.setViewCount(article.getViewCount() != null ? article.getViewCount() + 1 : 1);
         articleMapper.updateById(article);
+    }
+
+    @Override
+    public long count() {
+        return articleMapper.selectCount(null);
     }
 }

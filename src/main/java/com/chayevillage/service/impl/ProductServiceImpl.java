@@ -73,4 +73,9 @@ public class ProductServiceImpl implements ProductService {
         product.setStatus(product.getStatus() == 1 ? 0 : 1);
         return productMapper.updateById(product) > 0;
     }
+
+    @Override
+    public long count() {
+        return productMapper.selectCount(null);
+    }
 }
