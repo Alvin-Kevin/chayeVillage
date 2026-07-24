@@ -34,11 +34,12 @@ public class DashboardStatServiceImpl implements DashboardStatService {
 
     @Override
     public boolean saveOrUpdate(DashboardStat stat) {
-        if (stat.getId() != null) {
-            DashboardStat existing = dashboardStatMapper.selectById(stat.getId());
-            if (existing != null) {
-                return dashboardStatMapper.updateById(stat) > 0;
-            }
+        LambdaQueryWrapper<DashboardStat> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(DashboardStat::getStatKey, stat.getStatKey());
+        DashboardStat existing = dashboardStatMapper.selectOne(wrapper);
+        if (existing != null) {
+            stat.setId(existing.getId());
+            return dashboardStatMapper.updateById(stat) > 0;
         }
         return dashboardStatMapper.insert(stat) > 0;
     }
