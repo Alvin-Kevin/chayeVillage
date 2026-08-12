@@ -31,6 +31,12 @@ file:
   upload:
     path: ${FILE_UPLOAD_PATH:/app/uploads}
 
+oss:
+  endpoint: ${OSS_ENDPOINT:https://objectstorageapi.bja.sealos.run}
+  access-key: ${OSS_ACCESS_KEY:}
+  secret-key: ${OSS_SECRET_KEY:}
+  bucket: ${OSS_BUCKET:chaye-image}
+
 jwt:
   secret: ${JWT_SECRET:chaye-village-jwt-secret-key-2026-summer-practice-mabian}
   expiration: 7200000

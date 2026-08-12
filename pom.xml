@@ -81,6 +81,13 @@
             <version>5.8.23</version>
         </dependency>
 
+        <!-- MinIO 对象存储 SDK (S3兼容) -->
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>8.5.7</version>
+        </dependency>
+
         <!-- Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
