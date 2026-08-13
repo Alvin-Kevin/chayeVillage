@@ -78,9 +78,9 @@ public class FileController {
             return Result.success(data);
         } catch (io.minio.errors.ErrorResponseException e) {
             io.minio.messages.ErrorResponse er = e.errorResponse();
-            log.error("MinIO上传失败: code={}, message={}, bucket={}, object={}, resource={}, region={}, requestId={}, hostId={}",
+            log.error("MinIO上传失败: code={}, message={}, bucket={}, object={}, resource={}, requestId={}, hostId={}",
                     er.code(), er.message(), er.bucketName(), er.objectName(), er.resource(),
-                    er.region(), er.requestId(), er.hostId());
+                    er.requestId(), er.hostId());
             return Result.error(500, "文件上传失败: " + e.getMessage());
         } catch (Exception e) {
             log.error("文件上传失败", e);
