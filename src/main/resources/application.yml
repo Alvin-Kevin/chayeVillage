@@ -29,7 +29,7 @@ mybatis-plus:
 
 file:
   upload:
-    path: ${FILE_UPLOAD_PATH:/app/uploads}
+    path: ${FILE_UPLOAD_PATH:./uploads}
 
 oss:
   endpoint: ${OSS_ENDPOINT:https://objectstorageapi.bja.sealos.run}

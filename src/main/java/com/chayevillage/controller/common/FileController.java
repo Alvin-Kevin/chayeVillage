@@ -5,10 +5,12 @@ import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -31,6 +33,9 @@ public class FileController {
 
     @Value("${oss.bucket}")
     private String bucket;
+
+    @Value("${file.upload.path}")
+    private String uploadPath;
 
     private MinioClient minioClient;
 
@@ -56,12 +61,20 @@ public class FileController {
 
         String dateDir = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
         String newFilename = UUID.randomUUID().toString().replace("-", "") + ext;
-        String objectKey = dateDir + "/" + newFilename;
 
+        // 未配置 OSS 密钥时，回退到本地磁盘存储（便于本地开发）
+        if (!StringUtils.hasText(accessKey) || !StringUtils.hasText(secretKey)) {
+            return uploadToLocal(file, dateDir, newFilename);
+        }
+        return uploadToOss(file, dateDir, newFilename);
+    }
+
+    private Result<Map<String, String>> uploadToOss(MultipartFile file, String dateDir, String newFilename) {
         try {
             String contentType = file.getContentType() != null
                     ? file.getContentType()
                     : "application/octet-stream";
+            String objectKey = dateDir + "/" + newFilename;
 
             minioClient.putObject(PutObjectArgs.builder()
                     .bucket(bucket)
@@ -71,7 +84,7 @@ public class FileController {
                     .build());
 
             String url = endpoint + "/" + bucket + "/" + objectKey;
-            log.info("文件上传成功: {}", url);
+            log.info("文件上传成功(OSS): {}", url);
 
             Map<String, String> data = new HashMap<>();
             data.put("url", url);
@@ -84,6 +97,28 @@ public class FileController {
             return Result.error(500, "文件上传失败: " + e.getMessage());
         } catch (Exception e) {
             log.error("文件上传失败", e);
+            return Result.error(500, "文件上传失败: " + e.getMessage());
+        }
+    }
+
+    private Result<Map<String, String>> uploadToLocal(MultipartFile file, String dateDir, String newFilename) {
+        try {
+            File dir = new File(uploadPath, dateDir.replace("/", File.separator));
+            if (!dir.exists() && !dir.mkdirs()) {
+                log.error("创建上传目录失败: {}", dir.getAbsolutePath());
+                return Result.error(500, "创建上传目录失败");
+            }
+            File target = new File(dir, newFilename);
+            file.transferTo(target);
+
+            String url = "/uploads/" + dateDir + "/" + newFilename;
+            log.info("文件上传成功(本地): {}", target.getAbsolutePath());
+
+            Map<String, String> data = new HashMap<>();
+            data.put("url", url);
+            return Result.success(data);
+        } catch (Exception e) {
+            log.error("本地文件上传失败", e);
             return Result.error(500, "文件上传失败: " + e.getMessage());
         }
     }
